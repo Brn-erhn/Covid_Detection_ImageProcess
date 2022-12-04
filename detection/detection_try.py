@@ -40,6 +40,7 @@ def mean_finder(img):
 
 
 
+
 def contrast_stretching(img,blackT,whiteT):
     row, column = img.shape
     new_image = np.zeros((row, column), np.uint8)
