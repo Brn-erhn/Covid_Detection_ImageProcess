@@ -75,8 +75,7 @@ def mean_of(img, row, col):
 
 
     return img
-
-
+#try
 def mean_of_str(str, orgIm, row, col):
     row_image, column_image = orgIm.shape[:2]
     # processDim = [[], []]
