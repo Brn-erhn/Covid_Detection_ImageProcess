@@ -1,6 +1,40 @@
 import cv2
 import numpy as np
+import os
 means = []
+img_pixels = []
+
+
+
+
+lung_file = os.listdir("Package_2/lung_masks")
+org_file = os.listdir("Package_2/original_images_jpg")
+
+
+
+photo = int(input("Enter the photo number: "))
+print(org_file[photo][:-4])
+print(lung_file[photo])
+org_photo   = org_file[photo][:-4]
+
+
+
+
+
+
+def mean_finder(img):
+    row, column = img.shape
+    for i in range(0, row):
+        for j in range(0, column):
+            if img[i, j] > 0:
+                img_pixels.append(img[i, j])
+
+    sum = 0
+    for i in range(len(img_pixels)):
+        sum += img_pixels[i]
+    mean = sum / len(img_pixels)
+    return mean
+
 
 
 
@@ -135,37 +169,22 @@ def mask_to_binary(mask):
     return binary
 
 
-lung_mask = cv2.imread('lung_mask.png', cv2.IMREAD_GRAYSCALE)
-lung_mask2 = cv2.imread('lung_mask2.png', cv2.IMREAD_GRAYSCALE)
-org = cv2.imread('org.png', cv2.IMREAD_GRAYSCALE)
-org2= cv2.imread('org2.png', cv2.IMREAD_GRAYSCALE)
-ggo_mask = cv2.imread('ggo_mask.png', cv2.IMREAD_GRAYSCALE)
-lobe_mask = cv2.imread('lobe_mask.png', cv2.IMREAD_GRAYSCALE)
-mask_images = cv2.imread('mask_images.png', cv2.IMREAD_GRAYSCALE)
+lung_mask = cv2.imread(f'Package_2/lung_masks/{org_photo}.png', cv2.IMREAD_GRAYSCALE)
+org = cv2.imread(f'Package_2/original_images_jpg/{org_photo}.jpg', cv2.IMREAD_GRAYSCALE)
 
 result_lung = cv2.bitwise_and(org, org, mask=lung_mask)
-result_lung2 = cv2.bitwise_and(org2, org2, mask=lung_mask2)
-result_mask = cv2.bitwise_and(org, org, mask=mask_images)
 
-
-print(result_lung.shape)
-print(org.shape)
-print(up_down_nonzero_pixel(result_lung))
-
-print(down_up_nonzero_pixel(result_lung))
-
-print(left_right_nonzero_pixel(result_lung))
-print(right_left_nonzero_pixel(result_lung))
 
 cropped = crop_image(result_lung, up_down_nonzero_pixel(result_lung), down_up_nonzero_pixel(result_lung),
-                     left_right_nonzero_pixel(result_lung), right_left_nonzero_pixel(result_lung))
-cropped2= crop_image(result_lung2, up_down_nonzero_pixel(result_lung2), down_up_nonzero_pixel(result_lung2),
                      left_right_nonzero_pixel(result_lung), right_left_nonzero_pixel(result_lung))
 
 
 
 print(cropped.shape)
 cv2.imshow('cropped', cropped)
+mean = mean_finder(cropped)
+print(mean)
+print(len(img_pixels))
 
 stretch = contrast_stretching(cropped, 80, 130)
 cv2.imshow('stretch', stretch)
