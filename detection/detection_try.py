@@ -1,6 +1,13 @@
+#Author: Boran Erhan
+#Mail: boranerhan8@gmail.com
+
+
 import cv2
 import numpy as np
 import os
+
+from detection.Presets import contrast_stretching, contrast_stretching_preset
+
 means = []
 img_pixels = []
 
@@ -41,23 +48,7 @@ def mean_finder(img):
 
 
 
-def contrast_stretching(img,blackT,whiteT):
-    row, column = img.shape
-    new_image = np.zeros((row, column), np.uint8)
-    treshold_1 = blackT
-    treshold_2 = whiteT
-    if treshold_1 > treshold_2:
-        treshold_1 = whiteT
-        treshold_2 = blackT
-    for l in range(row):
-        for m in range(column):
-            if treshold_1 <= img[l, m] <= treshold_2:
-                new_image[l, m] = round(((img[l, m] - treshold_1) / (treshold_2 - treshold_1)) * 255)
-            elif img[l, m] < treshold_1:
-                new_image[l, m] = 0
-            elif img[l, m] > treshold_2:
-                new_image[l, m] = 255
-    return new_image
+
 
 def mean_of(img, row, col):
     row_image, column_image = img.shape[:2]
@@ -75,7 +66,7 @@ def mean_of(img, row, col):
 
 
     return img
-#try
+
 def mean_of_str(str, orgIm, row, col):
     row_image, column_image = orgIm.shape[:2]
     # processDim = [[], []]
@@ -83,12 +74,13 @@ def mean_of_str(str, orgIm, row, col):
     for i in range(0, row_image, row):
         for j in range(0, column_image, col):
             means.append(str[i:i + row, j:j + col].mean())
-            if str[i:i + row, j:j + col].mean() > 160:
+            if str[i:i + row, j:j + col].mean() > 166:
 
-                for m in range(i - row, i + (row+row)):
-                    for n in range(j - col, j + (col+col)):
-                        if float(str[m:m + 3, n:n + 3].mean()) > 155:
-                            orgIm[m:m + 2, n:n + 2] = 0
+               for m in range(i - row, i + (row+row)):
+                  for n in range(j - col, j + (col+col)):
+                      if float(str[m:m + 3, n:n + 3].mean()) > 155:
+                             orgIm[m:m + 2, n:n + 2] = 0
+
 
 
     return orgIm
@@ -183,22 +175,22 @@ cropped = crop_image(result_lung, up_down_nonzero_pixel(result_lung), down_up_no
 print(cropped.shape)
 cv2.imshow('cropped', cropped)
 mean = mean_finder(cropped)
-print(mean)
+
+
+
+
+
+print(f"mean:{mean}")
 print(len(img_pixels))
 
-stretch = contrast_stretching(cropped, 80, 130)
+# stretch = contrast_stretching(cropped, 85, 115)
+stretch = contrast_stretching_preset(cropped,mean)
 cv2.imshow('stretch', stretch)
 
 test = cropped
-b = mean_of(cropped, 10, 10)
 
-# print(max(means))
-# print(min(means))
-
-cv2.imshow('croppedDet2',  b)
-
-a = mean_of_str(stretch, test, 10, 10)
-cv2.imshow('croppedDet',  a)
+main_result = mean_of_str(stretch, test, 13, 13)
+cv2.imshow('croppedDet', main_result)
 
 
 cv2.waitKey(0)
