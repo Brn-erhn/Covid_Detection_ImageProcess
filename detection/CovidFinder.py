@@ -11,7 +11,6 @@ import errno, os, stat, shutil
 import sys
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFileDialog
-from PIL import Image
 import os
 
 
