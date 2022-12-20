@@ -614,6 +614,13 @@ QAbstractSpinBox {
       </property>
      </widget>
     </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="metrics">
+      <property name="text">
+       <string>Accuracy :   Precision :   Recall :</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">

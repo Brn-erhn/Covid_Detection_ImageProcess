@@ -1,37 +1,26 @@
 import numpy as np
 
 
-def contrast_stretching_preset(img,mean):
+def contrast_stretching_preset(img, mean):
     global strecthed
     if mean < 95:
-        strecthed =  contrast_stretching(img,88,115)
+        strecthed = contrast_stretching(img, 88, 115)
     elif mean < 105:
-        strecthed =  contrast_stretching(img,100,140)
+        strecthed = contrast_stretching(img, 100, 140)
     elif mean < 115:
-        strecthed =  contrast_stretching(img,105,160)
+        strecthed = contrast_stretching(img, 105, 160)
     elif mean < 125:
-        strecthed =  contrast_stretching(img,115,160)
+        strecthed = contrast_stretching(img, 115, 160)
     elif mean < 135:
-        strecthed =  contrast_stretching(img,115,160)
+        strecthed = contrast_stretching(img, 115, 160)
     elif mean <= 145:
-        strecthed =  contrast_stretching(img,115,165)
+        strecthed = contrast_stretching(img, 115, 165)
     elif mean > 145:
-        strecthed =  contrast_stretching(img,115,190)
+        strecthed = contrast_stretching(img, 115, 190)
     return strecthed
 
 
-
-
-
-
-
-
-
-
-
-
-
-def contrast_stretching(img,blackT,whiteT):
+def contrast_stretching(img, blackT, whiteT):
     row, column = img.shape
     new_image = np.zeros((row, column), np.uint8)
     treshold_1 = blackT
